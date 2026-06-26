@@ -1,0 +1,16 @@
+# For local dev without a domain, use :80.
+# Replace with your domain for automatic HTTPS:
+#   scriftex.example.com {
+:80 {
+    root * /usr/share/caddy
+    encode
+
+    handle /api/* {
+        reverse_proxy backend:3001
+    }
+
+    handle {
+        try_files {path} /index.html
+        file_server
+    }
+}

@@ -1,0 +1,8 @@
+@import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+@import 'react-pdf/dist/esm/Page/TextLayer.css';
+
+.editor {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}

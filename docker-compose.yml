@@ -1,0 +1,28 @@
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: caddy/Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    volumes:
+      - backend-data:/app/data
+    environment:
+      - DB_PATH=/app/data/scriftex.db
+      - LATEX_SERVICE_URL=http://latex:4000
+    depends_on:
+      - latex
+
+  latex:
+    build: ./services/latex
+    ports:
+      - "4000"
+
+volumes:
+  backend-data:
