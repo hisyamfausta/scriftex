@@ -1,6 +1,15 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+
+# Runtime data
 backend/data/
 *.db
-.opencode/
+
+# Environment
 .env
+
+# Editor / tools
+.opencode/

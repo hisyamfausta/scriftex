@@ -20,7 +20,7 @@ services:
       - latex
 
   latex:
-    build: ./services/latex
+    build: ./latex
     ports:
       - "4000"
 

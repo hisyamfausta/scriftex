@@ -49,7 +49,7 @@ scriftex/
 │   └── src/
 │       ├── db.ts         # SQLite schema + queries
 │       └── index.ts      # Hono routes
-├── services/latex/               # Compilation service
+├── latex/                        # Compilation service
 │   └── src/
 │       └── index.ts      # pdflatex runner
 └── docker-compose.yml

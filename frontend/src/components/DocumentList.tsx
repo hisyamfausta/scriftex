@@ -1,13 +1,13 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import type { DocumentSummary } from '../api/compile'
+import type { DocumentSummary } from '../data/models/Document'
 
 interface Props {
   documents: DocumentSummary[]
   activeId: string | null
   onSelect: (id: string) => void
-  onNew: () => void
+  onNew: (templateId?: string) => void
   onDelete: (id: string) => void
 }
 
@@ -18,7 +18,7 @@ export default function DocumentList({ documents, activeId, onSelect, onNew, onD
         <span className="text-base font-medium text-muted-foreground">
           Documents
         </span>
-        <Button variant="outline" size="xs" onClick={onNew}>+ New</Button>
+        <Button variant="outline" size="xs" onClick={() => onNew()}>+ New</Button>
       </div>
       <ScrollArea className="flex-1">
         <div className="flex flex-col gap-px p-1">

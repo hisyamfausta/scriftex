@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
@@ -15,7 +15,7 @@ interface Props {
   onDownloadPdf: () => void
   onDownloadTex: () => void
   onUploadTex: (file: File) => void
-  onNew: () => void
+  onNew: (templateId?: string) => void
   onDelete: () => void
   isCompiling: boolean
   isDirty: boolean
@@ -27,6 +27,7 @@ interface Props {
   onThemeToggle: () => void
   autoCompile: boolean
   onAutoCompileToggle: () => void
+  templates: { id: string; name: string }[]
 }
 
 const FONT_SIZES = [10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24]
@@ -38,19 +39,51 @@ export default function Toolbar({
   editorFontSize, onEditorFontSizeChange,
   theme, onThemeToggle,
   autoCompile, onAutoCompileToggle,
+  templates,
 }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [showTemplateMenu, setShowTemplateMenu] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!showTemplateMenu) return
+    const handleClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowTemplateMenu(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [showTemplateMenu])
 
   return (
     <div className="flex items-center gap-1.5 border-b bg-muted/30 px-3 py-1.5">
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button variant="ghost" size="icon-sm" onClick={onNew}>
-            <Plus />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>New document</TooltipContent>
-      </Tooltip>
+      <div className="relative">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon-sm" onClick={() => setShowTemplateMenu((v) => !v)}>
+              <Plus />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>New document</TooltipContent>
+        </Tooltip>
+        {showTemplateMenu && (
+          <div
+            ref={menuRef}
+            className="absolute left-0 top-full z-50 mt-1 w-64 rounded-md border bg-popover p-1 shadow-md"
+          >
+            {templates.map((t) => (
+              <button
+                key={t.id}
+                className="w-full rounded-sm px-2 py-1.5 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                onClick={() => { onNew(t.id); setShowTemplateMenu(false) }}
+              >
+                {t.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       {hasDocument && (
         <Tooltip>
